@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+*.egg-info/
+mlruns/
+.prefect/
+*.log
+minio_data/
+postgres_data/

@@ -1,0 +1,16 @@
+{
+  "drift_detected": true,
+  "max_js_divergence": 0.487,
+  "threshold": 0.1,
+  "feature_scores": {
+    "tenure": 0.0863,
+    "MonthlyCharges": 0.487,
+    "TotalCharges": 0.0942
+  },
+  "null_counts": {
+    "tenure": 0,
+    "MonthlyCharges": 0,
+    "TotalCharges": 0
+  },
+  "timestamp": "2026-05-09T14:42:48.325131"
+}
