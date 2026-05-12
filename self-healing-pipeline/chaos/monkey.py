@@ -33,7 +33,7 @@ def inject_outliers(df: pd.DataFrame, frac=0.05) -> pd.DataFrame:
     corrupted = df.copy()
     idx = corrupted.sample(frac=frac).index
     corrupted.loc[idx, "tenure"] = 9999
-    print(f"[Chaos] Injected outliers into tenure ({frac*100:.0f}% rows → value=9999)")
+    print(f"[Chaos] Injected outliers into tenure ({frac*100:.0f}% rows -> value=9999)")
     return corrupted
 
 SCENARIOS = {

@@ -1,16 +1,16 @@
 {
-  "drift_detected": true,
-  "max_js_divergence": 0.2559,
+  "drift_detected": false,
+  "max_js_divergence": 0.0792,
   "threshold": 0.1,
   "feature_scores": {
-    "tenure": 0.1018,
-    "MonthlyCharges": 0.2559,
-    "TotalCharges": 0.1894
+    "tenure": 0.0176,
+    "MonthlyCharges": 0.0792,
+    "TotalCharges": 0.0582
   },
   "null_counts": {
     "tenure": 0,
     "MonthlyCharges": 0,
     "TotalCharges": 0
   },
-  "timestamp": "2026-05-11T08:26:23.278287"
+  "timestamp": "2026-05-12T13:17:57.182436"
 }

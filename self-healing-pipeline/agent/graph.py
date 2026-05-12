@@ -141,6 +141,13 @@ if __name__ == "__main__":
     
     Decide on the remediation tool to call.
     """
+    print("Starting Agent Execution...")
+    import time
+    start_time = time.time()
+    
     result = run_agent(context)
-    print(f"\n[Done] Agent complete | tool={result['tool_called']} | iterations={result['iterations']}")
+    
+    end_time = time.time()
+    art_ttr = end_time - start_time
+    print(f"\n[Done] Agent complete in {art_ttr:.3f} seconds | tool={result['tool_called']} | iterations={result['iterations']}")
     print(f"Conclusion: {result['conclusion']}")
