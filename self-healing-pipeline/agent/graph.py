@@ -118,22 +118,28 @@ if __name__ == "__main__":
     from agent.tools import get_drift_report
     report = get_drift_report()
     context = f"""
-    Pipeline alert: Data drift has already been confirmed.
+    Pipeline Alert: Monitoring system has detected a potential anomaly.
     
-    Drift Report (already fetched, do NOT call get_drift_report again):
+    [ACTUAL DRIFT REPORT]
     {json.dumps(report, indent=2)}
     
-    Analysis:
-    - max_js_divergence={report['max_js_divergence']} which is > 0.3 threshold
-    - No null values detected in null_counts
-    - MonthlyCharges is the sick feature with JS=0.487
+    [DIAGNOSTIC SUMMARY]
+    - Status: {'DRIFT DETECTED' if report.get('drift_detected') else 'HEALTHY'}
+    - Peak JS Divergence: {report.get('max_js_divergence', 0.0)}
+    - Threshold: {report.get('threshold', 0.1)}
     
-    Per your decision logic:
-    - drift_detected=True, null_counts are zero → NOT a data corruption issue
-    - JS divergence = 0.487 > 0.3 → this is concept drift, NOT transient noise
-    - Required action: trigger_retraining immediately
+    Feature Breakdown:
+    {json.dumps(report.get('feature_scores', {}), indent=2)}
     
-    Call trigger_retraining now. Do not call get_drift_report.
+    Data Integrity (Null Counts):
+    {json.dumps(report.get('null_counts', {}), indent=2)}
+    
+    Based on the report above, identify if this is:
+    1. Data Corruption (high null counts)
+    2. Concept Drift (high JS divergence, zero nulls)
+    3. Transient Noise (low JS divergence)
+    
+    Decide on the remediation tool to call.
     """
     result = run_agent(context)
     print(f"\n[Done] Agent complete | tool={result['tool_called']} | iterations={result['iterations']}")

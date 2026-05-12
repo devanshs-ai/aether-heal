@@ -163,3 +163,6 @@ infra/pipeline.log
 cleaned_batch.csv
 *.csv
 !self-healing-pipeline/data/*.csv
+*.db
+mlruns.db
+infra/latest_drift_report.json

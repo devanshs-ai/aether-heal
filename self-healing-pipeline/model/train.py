@@ -1,4 +1,6 @@
 import os
+import sys
+sys.path.insert(0, os.getcwd())
 import mlflow
 import mlflow.xgboost
 import pandas as pd
@@ -8,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.preprocessing import LabelEncoder
 from dotenv import load_dotenv
+from utils.data import load_and_preprocess_data
 
 load_dotenv()
 uri = os.getenv("MLFLOW_TRACKING_URI", "sqlite:///mlruns.db")
