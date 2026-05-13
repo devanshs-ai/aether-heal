@@ -36,7 +36,7 @@ def compute_drift(df: pd.DataFrame) -> dict:
     ref = get_ref_stats()
     if ref is None:
         return {"drift_detected": False, "message": "No reference stats found"}
-    watch_cols = ["tenure", "MonthlyCharges", "TotalCharges"]
+    watch_cols = ["Amount", "V1", "V2"]
     results = {}
     max_score = 0.0
 

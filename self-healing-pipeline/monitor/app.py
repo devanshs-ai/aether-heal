@@ -48,11 +48,11 @@ def score_batch(payload: dict):
         model = MODEL_CACHE["model"]
         version = MODEL_CACHE["version"]
         
-        preds = model.predict(df.drop(columns=["Churn"], errors="ignore"))
+        preds = model.predict(df.drop(columns=["Class"], errors="ignore"))
         return {
             "model_version": version,
             "scored_rows": len(preds),
-            "churn_rate": float(preds.mean())
+            "fraud_rate": float(preds.mean())
         }
     except HTTPException:
         raise

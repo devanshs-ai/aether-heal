@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: aether_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pipeline_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pipeline_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-pipeline_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pipeline_user -d pipeline_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.11.3
+    container_name: aether_mlflow
+    ports:
+      - "5000:5000"
+    command: >
+      mlflow server
+      --backend-store-uri sqlite:///mlruns.db
+      --default-artifact-root ./mlartifacts
+      --host 0.0.0.0
+      --port 5000
+    volumes:
+      - ./mlruns.db:/mlflow/mlruns.db
+      - ./mlartifacts:/mlflow/mlartifacts
+
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aether_monitor
+    ports:
+      - "8000:8000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - POSTGRES_USER=${POSTGRES_USER:-pipeline_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pipeline_pass}
+      - POSTGRES_DB=${POSTGRES_DB:-pipeline_db}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+      mlflow:
+        condition: service_started
+    volumes:
+      - ./infra:/app/infra
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    container_name: aether_ui
+    ports:
+      - "8501:8501"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - POSTGRES_USER=${POSTGRES_USER:-pipeline_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pipeline_pass}
+      - POSTGRES_DB=${POSTGRES_DB:-pipeline_db}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+    depends_on:
+      - monitor
+      - db
+
+volumes:
+  postgres_data:

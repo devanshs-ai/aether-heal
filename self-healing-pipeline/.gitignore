@@ -3,7 +3,11 @@ __pycache__/
 *.pyc
 *.egg-info/
 mlruns/
+mlartifacts/
+mlruns.db
 .prefect/
 *.log
 minio_data/
 postgres_data/
+infra/*.csv
+infra/*.json

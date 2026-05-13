@@ -46,10 +46,10 @@ def preprocess(df: pd.DataFrame, run_id: str) -> pd.DataFrame:
 def score(df: pd.DataFrame, run_id: str) -> dict:
     logger = get_run_logger()
     model, version = get_lkg_model()
-    X = df.drop(columns=["Churn"])
+    X = df.drop(columns=["Class"], errors="ignore")
     preds = model.predict(X)
-    result = {"model_version": version, "scored_rows": len(preds), "churn_rate": float(preds.mean())}
-    logger.info(f"[{run_id}] Scored | churn_rate={result['churn_rate']:.3f} | version={version}")
+    result = {"model_version": version, "scored_rows": len(preds), "fraud_rate": float(preds.mean())}
+    logger.info(f"[{run_id}] Scored | fraud_rate={result['fraud_rate']:.3f} | version={version}")
     return result
 
 @flow(name="churn-pipeline", log_prints=True)

@@ -24,7 +24,7 @@ def load_data():
 
 def train():
     df = load_data()
-    X, y = df.drop(columns=["Churn"]), df["Churn"]
+    X, y = df.drop(columns=["Class"]), df["Class"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Save reference distribution for drift detection later

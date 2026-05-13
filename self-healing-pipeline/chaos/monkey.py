@@ -14,26 +14,26 @@ def load_clean_data() -> pd.DataFrame:
 def inject_nulls(df: pd.DataFrame, frac=0.15) -> pd.DataFrame:
     """Scenario A: inject nulls into key features."""
     corrupted = df.copy()
-    for col in ["tenure", "MonthlyCharges", "TotalCharges"]:
+    for col in ["Amount", "V1", "V2"]:
         idx = corrupted.sample(frac=frac).index
         corrupted.loc[idx, col] = np.nan
-    print(f"[Chaos] Injected nulls into tenure/MonthlyCharges/TotalCharges ({frac*100:.0f}% rows)")
+    print(f"[Chaos] Injected nulls into Amount/V1/V2 ({frac*100:.0f}% rows)")
     return corrupted
 
 def shift_distribution(df: pd.DataFrame, std_multiplier=2.5) -> pd.DataFrame:
-    """Scenario B: shift MonthlyCharges distribution to simulate concept drift."""
+    """Scenario B: shift Amount distribution to simulate concept drift."""
     corrupted = df.copy()
-    shift = corrupted["MonthlyCharges"].std() * std_multiplier
-    corrupted["MonthlyCharges"] = corrupted["MonthlyCharges"] + shift
-    print(f"[Chaos] Shifted MonthlyCharges by +{shift:.2f} (concept drift)")
+    shift = corrupted["Amount"].std() * std_multiplier
+    corrupted["Amount"] = corrupted["Amount"] + shift
+    print(f"[Chaos] Shifted Amount by +{shift:.2f} (concept drift)")
     return corrupted
 
 def inject_outliers(df: pd.DataFrame, frac=0.05) -> pd.DataFrame:
-    """Scenario C: inject extreme outliers into tenure."""
+    """Scenario C: inject extreme outliers into Amount."""
     corrupted = df.copy()
     idx = corrupted.sample(frac=frac).index
-    corrupted.loc[idx, "tenure"] = 9999
-    print(f"[Chaos] Injected outliers into tenure ({frac*100:.0f}% rows -> value=9999)")
+    corrupted.loc[idx, "Amount"] = 99999.0
+    print(f"[Chaos] Injected outliers into Amount ({frac*100:.0f}% rows -> value=99999.0)")
     return corrupted
 
 SCENARIOS = {
